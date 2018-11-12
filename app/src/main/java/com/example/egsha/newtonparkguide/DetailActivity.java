@@ -2,12 +2,11 @@ package com.example.egsha.newtonparkguide;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-//import com.squareup.picasso.Picasso;
-
 import androidx.appcompat.app.AppCompatActivity;
+
+//import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -29,7 +28,7 @@ public class DetailActivity extends AppCompatActivity {
 
 
         final long personId = getIntent().getLongExtra(EXTRA_PERSON_ID, 0);
-        final Exhibit exhibit = AppDatabase.getInstance(this).personDao().getById(personId);
+        final Exhibit exhibit = AppDatabase.getInstance(this).exhibitDao().getById(personId);
 /*        Picasso.get().load(person.getAvatar())
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)

@@ -1,51 +1,50 @@
 package com.example.egsha.newtonparkguide;
 
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import java.util.List;
 
-public class ExhibitAdapter extends RecyclerView.Adapter<ExhibitAdapter.ExibitViewHolder>{
-    private List<Exhibit> exhibites;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class ExhibitAdapter extends RecyclerView.Adapter<ExhibitAdapter.ExhibitViewHolder>{
+    private List<Exhibit> exhibits;
     private OnItemClickListener itemClickListener;
 
     public ExhibitAdapter(List<Exhibit> people, OnItemClickListener itemClickListener) {
-        this.exhibites = people;
+        this.exhibits = people;
         this.itemClickListener = itemClickListener;
     }
 
     @NonNull
     @Override
-    public ExibitViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ExhibitViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_exhibit, viewGroup, false);
-        return new ExibitViewHolder(view);
+        return new ExhibitViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExibitViewHolder exibitViewHolder, int position) {
-        exibitViewHolder.bind(exhibites.get(position), itemClickListener);
+    public void onBindViewHolder(@NonNull ExhibitViewHolder exhibitViewHolder, int position) {
+        exhibitViewHolder.bind(exhibits.get(position), itemClickListener);
     }
 
     @Override
     public int getItemCount() {
-        return exhibites == null ? 0 : exhibites.size();
+        return exhibits == null ? 0 : exhibits.size();
     }
 
     public void add(Exhibit exhibit){
-        exhibites.add(exhibit);
+        exhibits.add(exhibit);
         notifyDataSetChanged();
     }
 
     public void update(List<Exhibit> people){
-        this.exhibites.clear();
-        this.exhibites.addAll(people);
+        this.exhibits.clear();
+        this.exhibits.addAll(people);
         notifyDataSetChanged();
     }
 
@@ -53,11 +52,11 @@ public class ExhibitAdapter extends RecyclerView.Adapter<ExhibitAdapter.ExibitVi
         void onItemClick(Exhibit item);
     }
 
-    public static class ExibitViewHolder extends RecyclerView.ViewHolder{
+    public static class ExhibitViewHolder extends RecyclerView.ViewHolder{
 
         TextView tvName;
 
-        public ExibitViewHolder(@NonNull View itemView) {
+        public ExhibitViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvName);
         }

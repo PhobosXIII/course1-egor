@@ -3,9 +3,7 @@ package com.example.egsha.newtonparkguide;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toolbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,14 +21,6 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         initList();
-
-        /*FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            final PersonDao personDao = AppDatabase.getInstance(this).personDao();
-            personDao.insertPerson(generator.getPerson());
-            List<Exhibit> people = personDao.getAll();
-            adapter.update(people);
-        });*/
     }
 
     private void initList() {
@@ -38,7 +28,7 @@ public class ListActivity extends AppCompatActivity {
         rvPersons.setHasFixedSize(true);
         rvPersons.setLayoutManager(new LinearLayoutManager(this));
         rvPersons.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        List<Exhibit> exhibits = new ArrayList<>();// = AppDatabase.getInstance(this).personDao().getAll();
+        List<Exhibit> exhibits = AppDatabase.getInstance(this).exhibitDao().getAll();
         adapter = new ExhibitAdapter(exhibits, exhibit -> {
             final Intent intent = DetailActivity.getStartIntent(this, exhibit.getId());
             startActivity(intent);
