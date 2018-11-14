@@ -16,4 +16,7 @@ public interface ExhibitDao {
 
     @Insert
     long insertExhibit(Exhibit exhibit);
+
+    @Insert
+    void insertExhibits(List<Exhibit> exhibits);
 }

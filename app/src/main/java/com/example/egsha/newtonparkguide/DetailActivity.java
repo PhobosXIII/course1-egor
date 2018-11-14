@@ -2,11 +2,12 @@ package com.example.egsha.newtonparkguide;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.squareup.picasso.Picasso;
 
-//import com.squareup.picasso.Picasso;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -25,16 +26,16 @@ public class DetailActivity extends AppCompatActivity {
 
     private void initUi() {
         TextView tvDescription = findViewById(R.id.tvDescription);
-
+        ImageView ivImage = findViewById(R.id.ivImage);
 
         final long personId = getIntent().getLongExtra(EXTRA_PERSON_ID, 0);
         final Exhibit exhibit = AppDatabase.getInstance(this).exhibitDao().getById(personId);
-/*        Picasso.get().load(person.getAvatar())
+        Picasso.get().load(exhibit.getImage())
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
                 .fit()
                 .centerCrop()
-                .into(ivAvatar);*/
+                .into(ivImage);
         tvDescription.setText(exhibit.getDescription());
 
     }
