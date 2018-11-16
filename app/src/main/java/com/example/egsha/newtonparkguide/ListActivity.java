@@ -3,7 +3,10 @@ package com.example.egsha.newtonparkguide;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -16,48 +19,49 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ListActivity extends AppCompatActivity {
 
     private ExhibitAdapter adapter;
+    RecyclerView rvExhibits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ExhibitDao exhibitDao = AppDatabase.getInstance(this).exhibitDao();
-        if (exhibitDao.getAll().size() == 0){
-            exhibitDao.insertExhibits(ExibitGenerator.getExhibits());
+        if (exhibitDao.getAll().size() == 0) {
+            exhibitDao.insertExhibits(ExhibitGenerator.getExhibits());
         }
 
         initList();
     }
 
     private void initList() {
-        RecyclerView rvPersons = findViewById(R.id.rvExhibits);
-        rvPersons.setHasFixedSize(true);
-        rvPersons.setLayoutManager(new LinearLayoutManager(this));
-        rvPersons.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        rvExhibits = findViewById(R.id.rvExhibits);
+        rvExhibits.setHasFixedSize(true);
+        rvExhibits.setLayoutManager(new LinearLayoutManager(this));
+        rvExhibits.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         List<Exhibit> exhibits = AppDatabase.getInstance(this).exhibitDao().getAll();
         adapter = new ExhibitAdapter(exhibits, exhibit -> {
             final Intent intent = DetailActivity.getStartIntent(this, exhibit.getId());
             startActivity(intent);
         });
-        rvPersons.setAdapter(adapter);
+        rvExhibits.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_list, menu);
+        getMenuInflater().inflate(R.menu.activity_list, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.actionSearch).getActionView();
+        searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
-                if(Long.valueOf(query) > 0 && Long.valueOf(query) < ExibitGenerator.numberOfExhibits){Intent intent = DetailActivity.getStartIntent(ListActivity.this, Long.valueOf(query));
-                startActivity(intent);}
-
-//                try{
-//                    (int)query;
-//                }catch(){
-//
-//                }
+                long searchId = Long.valueOf(query);
+                Exhibit exhibit = AppDatabase.getInstance(ListActivity.this).exhibitDao().getById(searchId);
+                if (exhibit != null) {
+                    Intent intent = DetailActivity.getStartIntent(ListActivity.this, searchId);
+                    startActivity(intent);
+                } else {
+                    Snackbar.make(rvExhibits, "Exhibit not found", Snackbar.LENGTH_LONG).show();
+                }
                 return true;
             }
 
