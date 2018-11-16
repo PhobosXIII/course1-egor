@@ -36,4 +36,5 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0' //https://github.com/journeyapps/zxing-android-embedded
 }

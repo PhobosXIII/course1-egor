@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.List;
 
@@ -31,6 +34,24 @@ public class ListActivity extends AppCompatActivity {
         }
 
         initList();
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            new IntentIntegrator(this).initiateScan();
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            String contents = result.getContents();
+            if(contents != null) {
+                searchExhibit(contents);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void initList() {
@@ -54,14 +75,7 @@ public class ListActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                long searchId = Long.valueOf(query);
-                Exhibit exhibit = AppDatabase.getInstance(ListActivity.this).exhibitDao().getById(searchId);
-                if (exhibit != null) {
-                    Intent intent = DetailActivity.getStartIntent(ListActivity.this, searchId);
-                    startActivity(intent);
-                } else {
-                    Snackbar.make(rvExhibits, "Exhibit not found", Snackbar.LENGTH_LONG).show();
-                }
+                searchExhibit(query);
                 return true;
             }
 
@@ -71,5 +85,16 @@ public class ListActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    private void searchExhibit(String exhibitId) {
+        long searchId = Long.valueOf(exhibitId);
+        Exhibit exhibit = AppDatabase.getInstance(ListActivity.this).exhibitDao().getById(searchId);
+        if (exhibit != null) {
+            Intent intent = DetailActivity.getStartIntent(ListActivity.this, searchId);
+            startActivity(intent);
+        } else {
+            Snackbar.make(rvExhibits, "Exhibit not found", Snackbar.LENGTH_LONG).show();
+        }
     }
 }
